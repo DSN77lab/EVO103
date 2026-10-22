@@ -65,12 +65,12 @@ void Error_Handler(void);
 #define LCDRS_GPIO_Port GPIOA
 #define LCDRW_Pin GPIO_PIN_2
 #define LCDRW_GPIO_Port GPIOA
-#define LCD5_Pin GPIO_PIN_10
-#define LCD5_GPIO_Port GPIOB
-#define LCD6_Pin GPIO_PIN_11
-#define LCD6_GPIO_Port GPIOB
 #define LCD7_Pin GPIO_PIN_12
 #define LCD7_GPIO_Port GPIOB
+#define LCD6_Pin GPIO_PIN_13
+#define LCD6_GPIO_Port GPIOB
+#define LCD5_Pin GPIO_PIN_14
+#define LCD5_GPIO_Port GPIOB
 #define LCDEN_Pin GPIO_PIN_8
 #define LCDEN_GPIO_Port GPIOA
 #define LCD4_Pin GPIO_PIN_4

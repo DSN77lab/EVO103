@@ -106,14 +106,15 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  int ADC = 2;
-
+	  int nADC = 2;
+	  HAL_ADC_Start(&hadc1);		HAL_Delay(10);
+	  nADC = HAL_ADC_GetValue(&hadc1);
 	  uint8_t data[] = "Hello from STM32!\r\n";
 	  CDC_Transmit_FS(data, strlen((char*)data));
-	  sprintf(sLCDstring, "Cycles=%d", nCycles++);
+	  sprintf(sLCDstring, "Cycles=%d ADC=%d", nCycles++, nADC);
 	  LCDstring4(1, sLCDstring);
 	  HAL_GPIO_TogglePin(Led_GPIO_Port, Led_Pin);
-	  HAL_Delay(100);
+	  HAL_Delay(200);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -240,7 +241,7 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(GPIOA, LCDRS_Pin|LCDRW_Pin|LCDEN_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, LCD5_Pin|LCD6_Pin|LCD7_Pin|LCD4_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOB, LCD7_Pin|LCD6_Pin|LCD5_Pin|LCD4_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin : Led_Pin */
   GPIO_InitStruct.Pin = Led_Pin;
@@ -256,8 +257,8 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : LCD5_Pin LCD6_Pin LCD7_Pin LCD4_Pin */
-  GPIO_InitStruct.Pin = LCD5_Pin|LCD6_Pin|LCD7_Pin|LCD4_Pin;
+  /*Configure GPIO pins : LCD7_Pin LCD6_Pin LCD5_Pin LCD4_Pin */
+  GPIO_InitStruct.Pin = LCD7_Pin|LCD6_Pin|LCD5_Pin|LCD4_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
