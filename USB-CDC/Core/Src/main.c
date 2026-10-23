@@ -46,7 +46,7 @@
 ADC_HandleTypeDef hadc1;
 
 /* USER CODE BEGIN PV */
-
+int nCycles = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -72,7 +72,6 @@ int main(void)
 	ADC_ChannelConfTypeDef sADC = {0};
 	LCD_InitTypeDef LCDstruct = {0};
 	char sLCDstring[20];
-	int nCycles = 0;
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -109,13 +108,14 @@ int main(void)
 	  int nADC = 2;
 	  HAL_ADC_Start(&hadc1);		HAL_Delay(10);
 	  nADC = HAL_ADC_GetValue(&hadc1);
-	  uint8_t data[] = "Hello from STM32!\r\n";
-	  CDC_Transmit_FS(data, strlen((char*)data));
+//	  sprintf(sLCDstring, "Cycles=%d ", nCycles);
+//	  CDC_Transmit_FS(sLCDstring, strlen((char*)sLCDstring));
 	  sprintf(sLCDstring, "Cycles=%d ADC=%d", nCycles++, nADC);
 	  LCDstring4(1, sLCDstring);
 	  HAL_GPIO_TogglePin(Led_GPIO_Port, Led_Pin);
-	  HAL_Delay(200);
-    /* USER CODE END WHILE */
+	  HAL_Delay(100);
+	  // Если порт открыт, но прием "залип", принудительно разрешаем прием packets
+	/* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
   }
@@ -238,7 +238,8 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(Led_GPIO_Port, Led_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, LCDRS_Pin|LCDRW_Pin|LCDEN_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, LedG_Pin|LedR_Pin|LCDEN_Pin|LCDRW_Pin
+                          |LCDRS_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOB, LCD7_Pin|LCD6_Pin|LCD5_Pin|LCD4_Pin, GPIO_PIN_RESET);
@@ -250,8 +251,10 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(Led_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : LCDRS_Pin LCDRW_Pin LCDEN_Pin */
-  GPIO_InitStruct.Pin = LCDRS_Pin|LCDRW_Pin|LCDEN_Pin;
+  /*Configure GPIO pins : LedG_Pin LedR_Pin LCDEN_Pin LCDRW_Pin
+                           LCDRS_Pin */
+  GPIO_InitStruct.Pin = LedG_Pin|LedR_Pin|LCDEN_Pin|LCDRW_Pin
+                          |LCDRS_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
