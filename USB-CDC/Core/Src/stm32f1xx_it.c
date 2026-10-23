@@ -57,6 +57,7 @@
 /* External variables --------------------------------------------------------*/
 extern PCD_HandleTypeDef hpcd_USB_FS;
 /* USER CODE BEGIN EV */
+extern nSysTicks;
 extern nCycles;
 /* USER CODE END EV */
 
@@ -183,10 +184,11 @@ void PendSV_Handler(void)
 void SysTick_Handler(void)
 {
   /* USER CODE BEGIN SysTick_IRQn 0 */
-
+	nSysTicks++;
   /* USER CODE END SysTick_IRQn 0 */
   HAL_IncTick();
   /* USER CODE BEGIN SysTick_IRQn 1 */
+  if(nSysTicks%200 == 0)	Led_GPIO_Port->ODR ^= Led_Pin;
 
   /* USER CODE END SysTick_IRQn 1 */
 }
