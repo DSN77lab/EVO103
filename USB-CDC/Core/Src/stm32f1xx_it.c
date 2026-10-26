@@ -57,8 +57,10 @@
 /* External variables --------------------------------------------------------*/
 extern PCD_HandleTypeDef hpcd_USB_FS;
 /* USER CODE BEGIN EV */
-extern nSysTicks;
-extern nCycles;
+extern int nSysTicks;
+extern Event IntLed;
+extern int nRedLed;
+extern int nGreenLed;
 /* USER CODE END EV */
 
 /******************************************************************************/
@@ -188,7 +190,9 @@ void SysTick_Handler(void)
   /* USER CODE END SysTick_IRQn 0 */
   HAL_IncTick();
   /* USER CODE BEGIN SysTick_IRQn 1 */
-  if(nSysTicks%200 == 0)	Led_GPIO_Port->ODR ^= Led_Pin;
+  if(IntLed.nEventTime)		{	IntLed.nEventTime--;	}	else	{	IntLed.bEvent = 1;	}
+  if(nRedLed)		{	nRedLed--;		}	else	{	LedR_GPIO_Port->ODR &= ~LedR_Pin;	}
+  if(nGreenLed)		{	nGreenLed--;	}	else	{	LedG_GPIO_Port->ODR &= ~LedG_Pin;	}
 
   /* USER CODE END SysTick_IRQn 1 */
 }

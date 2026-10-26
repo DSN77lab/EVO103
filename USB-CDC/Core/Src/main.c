@@ -48,6 +48,9 @@ ADC_HandleTypeDef hadc1;
 /* USER CODE BEGIN PV */
 int nSysTicks = 0;
 int nCycles = 0;
+Event IntLed = {0, 0};
+int nRedLed = 0;
+int nGreenLed = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -71,7 +74,6 @@ int main(void)
 
   /* USER CODE BEGIN 1 */
 	ADC_ChannelConfTypeDef sADC = {0};
-	LCD_InitTypeDef LCDstruct = {0};
 	char sLCDstring[20];
   /* USER CODE END 1 */
 
@@ -113,7 +115,7 @@ int main(void)
 //	  CDC_Transmit_FS(sLCDstring, strlen((char*)sLCDstring));
 	  sprintf(sLCDstring, "Cycles=%d ADC=%d", nCycles++, nADC);
 	  LCDstring4(1, sLCDstring);
-//	  HAL_GPIO_TogglePin(Led_GPIO_Port, Led_Pin);
+	  HAL_GPIO_TogglePin(Led_GPIO_Port, Led_Pin);
 	  HAL_Delay(100);
 	  // Если порт открыт, но прием "залип", принудительно разрешаем прием packets
 	/* USER CODE END WHILE */

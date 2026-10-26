@@ -109,7 +109,10 @@ uint8_t UserTxBufferFS[APP_TX_DATA_SIZE];
 extern USBD_HandleTypeDef hUsbDeviceFS;
 
 /* USER CODE BEGIN EXPORTED_VARIABLES */
-extern nCycles;
+extern int nCycles;
+extern short nRedLed;
+extern short nGreenLed;
+
 /* USER CODE END EXPORTED_VARIABLES */
 
 /**
@@ -263,7 +266,8 @@ static int8_t CDC_Receive_FS(uint8_t* Buf, uint32_t *Len)
 	char sLCDstring[16];
 	  sprintf(sLCDstring, "Cycles=%d", nCycles);
 	   CDC_Transmit_FS(sLCDstring, strlen((char*)sLCDstring));
-	   LedR_GPIO_Port->ODR ^= LedR_Pin;
+
+	   LedR_GPIO_Port->ODR |= LedR_Pin;	nRedLed = 100;
   USBD_CDC_SetRxBuffer(&hUsbDeviceFS, &Buf[0]);
   USBD_CDC_ReceivePacket(&hUsbDeviceFS);
   return (USBD_OK);
@@ -285,8 +289,8 @@ uint8_t CDC_Transmit_FS(uint8_t* Buf, uint16_t Len)
 {
   uint8_t result = USBD_OK;
   /* USER CODE BEGIN 7 */
-  LedG_GPIO_Port->ODR ^= LedG_Pin;
-   USBD_CDC_HandleTypeDef *hcdc = (USBD_CDC_HandleTypeDef*)hUsbDeviceFS.pClassData;
+  LedG_GPIO_Port->ODR |= LedG_Pin;	nGreenLed = 100;
+  USBD_CDC_HandleTypeDef *hcdc = (USBD_CDC_HandleTypeDef*)hUsbDeviceFS.pClassData;
   if (hcdc->TxState != 0){
     return USBD_BUSY;
   }
