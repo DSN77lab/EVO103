@@ -51,6 +51,7 @@ int nCycles = 0;
 Event IntLed = {0, 0};
 int nRedLed = 0;
 int nGreenLed = 0;
+char bOldButton = 1;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -118,7 +119,7 @@ int main(void)
 	  HAL_GPIO_TogglePin(Led_GPIO_Port, Led_Pin);
 	  HAL_Delay(100);
 	  // Если порт открыт, но прием "залип", принудительно разрешаем прием packets
-	/* USER CODE END WHILE */
+    /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
   }
@@ -253,6 +254,12 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(Led_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : Button_Pin */
+  GPIO_InitStruct.Pin = Button_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
+  HAL_GPIO_Init(Button_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pins : LedG_Pin LedR_Pin LCDEN_Pin LCDRW_Pin
                            LCDRS_Pin */

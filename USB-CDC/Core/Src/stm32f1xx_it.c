@@ -58,9 +58,11 @@
 extern PCD_HandleTypeDef hpcd_USB_FS;
 /* USER CODE BEGIN EV */
 extern int nSysTicks;
+extern int nCycles;
 extern Event IntLed;
 extern int nRedLed;
 extern int nGreenLed;
+extern char bOldButton;
 /* USER CODE END EV */
 
 /******************************************************************************/
@@ -190,6 +192,24 @@ void SysTick_Handler(void)
   /* USER CODE END SysTick_IRQn 0 */
   HAL_IncTick();
   /* USER CODE BEGIN SysTick_IRQn 1 */
+  if(nSysTicks%100)
+  {
+	  char sLCDstring[20];
+	  char bButton = (Button_GPIO_Port->IDR & Button_Pin) ? 1 : 0;
+	  if(bButton != bOldButton)
+	  {
+		  if(bButton)
+		  {
+			  sprintf(sLCDstring, "Cycles=%d", nCycles);
+			  CDC_Transmit_FS(sLCDstring, strlen((char*)sLCDstring));
+		  }
+		  else
+		  {
+
+		  }
+		  bOldButton = bButton;
+	  }
+  }
   if(IntLed.nEventTime)		{	IntLed.nEventTime--;	}	else	{	IntLed.bEvent = 1;	}
   if(nRedLed)		{	nRedLed--;		}	else	{	LedR_GPIO_Port->ODR &= ~LedR_Pin;	}
   if(nGreenLed)		{	nGreenLed--;	}	else	{	LedG_GPIO_Port->ODR &= ~LedG_Pin;	}
